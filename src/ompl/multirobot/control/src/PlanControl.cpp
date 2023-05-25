@@ -82,7 +82,8 @@ void ompl::multirobot::control::PlanControl::printAsMatrix(std::ostream &out, st
 {
     for (unsigned int i = 0; i < paths_.size(); ++i)
     {
-        out << prefix << " " << i << std::endl;
+        // out << prefix << " " << i << std::endl;
+        out << prefix << std::endl;
         paths_[i]->printAsMatrix(out);
     }
 }

@@ -159,7 +159,15 @@ void ompl::control::PathControl::printAsMatrix(std::ostream &out) const
     std::vector<double> reals;
 
     space->copyToReals(reals, states_[0]);
-    std::copy(reals.begin(), reals.end(), std::ostream_iterator<double>(out, " "));
+    out << "    - [";
+    // std::copy(reals.begin(), reals.end(), std::ostream_iterator<double>(out, " "));
+    for (auto it = reals.begin(); it != reals.end(); ++it){
+        out << *it;
+        if (next(it)!=reals.end()){
+        out << ",";
+        }
+    }
+    out << "]"<<std::endl;
     if (controls_.empty())
         return;
 
@@ -168,19 +176,27 @@ void ompl::control::PathControl::printAsMatrix(std::ostream &out) const
     double *val;
     while ((val = cspace->getValueAddressAtIndex(controls_[0], n)) != nullptr)
         ++n;
-    for (unsigned int i = 0; i < n + m; ++i)
-        out << "0 ";
-    out << '0' << std::endl;
+    // for (unsigned int i = 0; i < n + m; ++i)
+    //     out << "0 ";
+    // out << '0' << std::endl;
     for (unsigned int i = 0; i < controls_.size(); ++i)
     {
+        out << "    - [";
         space->copyToReals(reals, states_[i + 1]);
-        std::copy(reals.begin(), reals.end(), std::ostream_iterator<double>(out, " "));
+        // std::copy(reals.begin(), reals.end(), std::ostream_iterator<double>(out, " "));
+        for (auto it = reals.begin(); it != reals.end(); ++it){
+            out << *it;
+            if (next(it)!=reals.end()){
+            out << ",";
+            }
+        }
+        out << "]"<<std::endl;
         // print discrete controls
-        printDiscreteControls(out, cs, controls_[i]);
+        // printDiscreteControls(out, cs, controls_[i]);
         // print real-valued controls
-        for (unsigned int j = 0; j < n; ++j)
-            out << *cspace->getValueAddressAtIndex(controls_[i], j) << ' ';
-        out << controlDurations_[i] << std::endl;
+        // for (unsigned int j = 0; j < n; ++j)
+            // out << *cspace->getValueAddressAtIndex(controls_[i], j) << ' '<<std::endl;;
+        // out << controlDurations_[i] << std::endl;
     }
 }
 
