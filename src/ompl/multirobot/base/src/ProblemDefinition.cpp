@@ -54,7 +54,7 @@ bool ompl::multirobot::base::PlannerSolution::operator<(const PlannerSolution &b
 }
 
 ompl::multirobot::base::ProblemDefinition::ProblemDefinition(SpaceInformationPtr si): 
-    si_(std::move(si)), solutions_(std::make_shared<PlannerSolutionSet>())
+    si_(std::move(si)), locked_(false), solutions_(std::make_shared<PlannerSolutionSet>())
 {
 }
 
