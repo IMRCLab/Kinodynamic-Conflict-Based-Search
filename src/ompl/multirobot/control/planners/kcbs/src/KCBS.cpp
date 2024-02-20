@@ -280,6 +280,7 @@ void ompl::multirobot::control::KCBS::attemptReplan(const unsigned int robot, No
     // attempt to find another trajectory
     // if successful, add the new plan to node prior to exit
     ompl::base::PlannerStatus solved;
+    auto start = std::chrono::steady_clock::now();
     if (retry)
         solved = node->getLowLevelSolver()->solve(llSolveTime_);
     else
@@ -287,6 +288,10 @@ void ompl::multirobot::control::KCBS::attemptReplan(const unsigned int robot, No
     
     if (solved == ompl::base::PlannerStatus::EXACT_SOLUTION)
     {
+        // icra 2024 
+        auto now = std::chrono::steady_clock::now();
+        double t = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
+        std::cout << "  - Low Level time: " << t/1000.0f << std::endl;
         PlanControlPtr new_plan = std::make_shared<PlanControl>(si_);
         auto new_path = std::make_shared<ompl::control::PathControl>(*llSolvers_[robot]->getProblemDefinition()->getSolutionPath()->as<ompl::control::PathControl>());
         for (unsigned int r = 0; r < siC_->getIndividualCount(); r++)
